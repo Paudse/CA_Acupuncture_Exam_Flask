@@ -7,9 +7,9 @@ app.secret_key = 'your_secret_key'
 # Define questions
 def import_question():
     folder = "../CA_Acupuncture_Exam/講義/"
-    file = "Q&A-1 中醫基礎 p01"
+    # file = "Q&A-1 中醫基礎 p01"
     # file = "Q&A-6 針灸 IIa p01"
-    # file = "Q&A-9 方劑 p01"
+    file = "Q&A-9 方劑 p01"
     ###
     foler_file_name = folder + file + ".txt"
     with open(foler_file_name, "r", encoding='utf-8') as f: 
