@@ -13,21 +13,33 @@
                 {{ option }}
             </label><br>
         {% endfor %}
-        <button type="submit">提交</button>
+        <br>
+        <button class="my-button" type="submit">提交</button>
+        <style>
+		  .my-button {
+		    width: 150px;  /* 設定寬度 */
+		    height: 50px;  /* 設定高度 */
+		    background-color: lightblue; /* 背景顏色 */
+		    border: none;  /* 取消邊框 */
+		    border-radius: 5px; /* 圓角 */
+		    font-size: 16px; /* 字體大小 */
+		    cursor: pointer; /* 鼠標樣式 */
+		  }
+		</style>
     </form>
 
     {% if session.get('is_answered') %}
-        <p>答案是：{{ '正确' if session.get('correct_answer') else '错误' }}</p>
+        <p style="color: {{ 'green' if session.get('correct_answer') else 'red' }}">答案是：{{ '正確' if session.get('correct_answer') else '錯誤' }}</p>
         {% if not session.get('correct_answer') %}
-            <p>很遗憾，答案错误。请再试一次。</p>
+            <p>很遺憾，答案錯誤。請再試一次。</p>
         {% endif %}
     {% endif %}
     <br>
     <form method="post" action="/previous">
-        <button type="submit" {% if question_index == 0 %}disabled{% endif %}>上一题</button>
+        <button type="submit" {% if question_index == 0 %}disabled{% endif %}>上一題</button>
     </form>
     <form method="post" action="/next">
-        <button type="submit" {% if question_index == questions|length - 1 %}disabled{% endif %}>下一题</button>
+        <button type="submit" {% if question_index == questions|length - 1 %}disabled{% endif %}>下一題</button>
     </form>
 </body>
 </html>
