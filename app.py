@@ -60,26 +60,27 @@ def import_question():
         questions.append(dic)
     return questions
 
-# questions = [
-#     {
-#         'question': '在陽性物質的基礎上所產生陰證 , 應屬於何種病證?',
-#         'options': ['氣虛', '血瘀'],
-#         'answer': '氣虛'
-#     },
-#     {
-#         'question': '依據五行理論的特性 , 五臟中何者屬於陽?',
-#         'options': ['肺, 腎','肝, 心'],
-#         'answer': '肝, 心'
-#     }
-# ]
-
 questions = import_question()
+
+questions = [
+    {
+        'question': '在陽性物質的基礎上所產生陰證 , 應屬於何種病證?',
+        'options': ['氣虛', '血瘀'],
+        'answer': '氣虛'
+    },
+    {
+        'question': '依據五行理論的特性 , 五臟中何者屬於陽?',
+        'options': ['肺, 腎','肝, 心'],
+        'answer': '肝, 心'
+    }
+]
 
 @app.route('/')
 def index():
     session['current_question'] = 0
     session['score'] = 0
     session['answered_questions'] = []  # Keep track of answered questions
+    session['incorrect_questions'] = []
     return redirect(url_for('question'))
 
 @app.route('/question', methods=['GET', 'POST'])
@@ -91,7 +92,8 @@ def question():
             selected_option = request.form['option']
             if selected_option == questions[current_question]['answer']:
                 if current_question not in session['answered_questions']:
-                    session['score'] += 1
+                    if session['is_answered'] == False:
+                        session['score'] += 1
                     session['answered_questions'].append(current_question)  # Mark question as answered correctly
                 session['correct_answer'] = True
             else:
