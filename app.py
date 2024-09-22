@@ -92,7 +92,10 @@ def question():
             selected_option = request.form['option']
             if selected_option == questions[current_question]['answer']:
                 if current_question not in session['answered_questions']:
-                    if session['is_answered'] == False:
+                    try:
+                        if session['is_answered'] == False:
+                            session['score'] += 1
+                    except:
                         session['score'] += 1
                     session['answered_questions'].append(current_question)  # Mark question as answered correctly
                 session['correct_answer'] = True
