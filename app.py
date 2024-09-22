@@ -6,19 +6,14 @@ app.secret_key = 'your_secret_key'
 # 定义题目
 questions = [
     {
-        'question': 'Python 是哪种类型的语言？',
-        'options': ['编译型', '解释型', '混合型'],
-        'answer': '解释型'
+        'question': '在陽性物質的基礎上所產生陰證 , 應屬於何種病證?',
+        'options': ['氣虛', '血瘀'],
+        'answer': '氣虛'
     },
     {
-        'question': 'Flask 是什么？',
-        'options': ['框架', '库', '语言'],
-        'answer': '框架'
-    },
-    {
-        'question': 'HTML 是什么的缩写？',
-        'options': ['高阶标记语言', '超文本标记语言', '超文本管理语言'],
-        'answer': '超文本标记语言'
+        'question': '依據五行理論的特性 , 五臟中何者屬於陽?',
+        'options': ['肝, 心', ' 肺, 腎'],
+        'answer': '肝, 心'
     }
 ]
 
