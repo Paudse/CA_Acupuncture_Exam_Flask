@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-# 定义题目
+# Define questions
 questions = [
     {
         'question': '在陽性物質的基礎上所產生陰證 , 應屬於何種病證?',
@@ -12,7 +12,7 @@ questions = [
     },
     {
         'question': '依據五行理論的特性 , 五臟中何者屬於陽?',
-        'options': ['肝, 心', ' 肺, 腎'],
+        'options': ['肺, 腎','肝, 心'],
         'answer': '肝, 心'
     }
 ]
@@ -21,6 +21,7 @@ questions = [
 def index():
     session['current_question'] = 0
     session['score'] = 0
+    session['answered_questions'] = []  # Keep track of answered questions
     return redirect(url_for('question'))
 
 @app.route('/question', methods=['GET', 'POST'])
@@ -31,7 +32,9 @@ def question():
         if 'option' in request.form:
             selected_option = request.form['option']
             if selected_option == questions[current_question]['answer']:
-                session['score'] += 1
+                if current_question not in session['answered_questions']:
+                    session['score'] += 1
+                    session['answered_questions'].append(current_question)  # Mark question as answered correctly
                 session['correct_answer'] = True
             else:
                 session['correct_answer'] = False
@@ -72,7 +75,8 @@ def previous_question():
 def result():
     score = session.get('score', 0)
     total_questions = len(questions)
-    return render_template('result.html', score=score, total=total_questions)
+    total_score = (score / total_questions) * 100 if total_questions > 0 else 0
+    return render_template('result.html', score= score, total_questions = total_questions, total_score=total_score, total=100)  # Show out of 100
 
 if __name__ == '__main__':
     app.run(debug=True)

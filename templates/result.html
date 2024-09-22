@@ -1,11 +1,12 @@
 <!doctype html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>结果</title>
+    <title>Result</title>
 </head>
 <body>
-    <h1>你的得分是 {{ score }} / {{ total }}</h1>
-    <a href="/">重新开始</a>
+	<h1>Your Score: {{ score }} out of {{ total_questions }}</h1>
+    <h1>Your Score: {{ total_score }}</h1>
+    <a href="{{ url_for('index') }}">Restart</a>
 </body>
 </html>
