@@ -46,7 +46,8 @@ def question():
         return render_template(
             'question.html',
             question=questions[current_question],
-            question_index=current_question,
+            question_index=current_question + 1,
+            total_questions=len(questions),
             is_answered=is_answered,
             correct_answer=correct_answer
         )

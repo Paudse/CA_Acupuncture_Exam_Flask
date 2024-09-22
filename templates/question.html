@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="utf-8">
-    <title>选择题</title>
+    <title></title>
     <style>
         body {
             text-align: left; /* 整體左對齊 */
@@ -51,6 +51,7 @@
     </style>
 </head>
 <body>
+	<h2>第 {{ question_index }} 题 / 共 {{ total_questions }} 题</h2>
     <h1>{{ question.question }}</h1>
     <form method="post" action="/question">
         {% for option in question.options %}
