@@ -1,21 +1,79 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+import random 
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 # Define questions
-questions = [
-    {
-        'question': '在陽性物質的基礎上所產生陰證 , 應屬於何種病證?',
-        'options': ['氣虛', '血瘀'],
-        'answer': '氣虛'
-    },
-    {
-        'question': '依據五行理論的特性 , 五臟中何者屬於陽?',
-        'options': ['肺, 腎','肝, 心'],
-        'answer': '肝, 心'
-    }
-]
+def import_question():
+    folder = "../CA_Acupuncture_Exam/講義/"
+    file = "Q&A-1 中醫基礎 p01"
+    # file = "Q&A-6 針灸 IIa p01"
+    # file = "Q&A-9 方劑 p01"
+    ###
+    foler_file_name = folder + file + ".txt"
+    with open(foler_file_name, "r", encoding='utf-8') as f: 
+            data = f.readlines()
+    q = []
+    s1 = []
+    s2 = []
+    s3 = []
+    s4 = []
+    a = []
+    for i in range (0,len(data)):
+        # print(i%3)
+        # print(data[i])
+        if i%7 == 0:
+            q.append(data[i].replace('\n', ''))
+        if i%7 == 1:
+            s1.append(data[i].replace('\n', ''))
+        if i%7 == 2:
+            s2.append(data[i].replace('\n', ''))
+        if i%7 == 3:
+            s3.append(data[i].replace('\n', ''))
+        if i%7 == 4:
+            s4.append(data[i].replace('\n', ''))
+        if i%7 == 5:
+            a.append(data[i].replace('\n', ''))
+
+    c = list(zip(q,s1,s2,s3,s4,a))
+    random.shuffle(c)
+    q,s1,s2,s3,s4,a = zip(*c)
+
+    questions = []
+
+    for i in range(0,len(q)):
+        if a[i] == '1':
+            ans = s1[i]
+        elif a[i] == '2':
+            ans = s2[i]
+        elif a[i] == '3':
+            ans = s3[i]
+        elif a[i] == '4':
+            ans = s4[i]
+
+        dic = {
+        'question': q[i],
+        'options': [s1[i],s2[i],s3[i],s4[i]],
+        'answer': ans
+        }
+        questions.append(dic)
+    return questions
+
+# questions = [
+#     {
+#         'question': '在陽性物質的基礎上所產生陰證 , 應屬於何種病證?',
+#         'options': ['氣虛', '血瘀'],
+#         'answer': '氣虛'
+#     },
+#     {
+#         'question': '依據五行理論的特性 , 五臟中何者屬於陽?',
+#         'options': ['肺, 腎','肝, 心'],
+#         'answer': '肝, 心'
+#     }
+# ]
+
+questions = import_question()
 
 @app.route('/')
 def index():
@@ -75,7 +133,7 @@ def previous_question():
 def result():
     score = session.get('score', 0)
     total_questions = len(questions)
-    total_score = (score / total_questions) * 100 if total_questions > 0 else 0
+    total_score = round((score / total_questions) * 100, 2) if total_questions > 0 else 0
     return render_template('result.html', score= score, total_questions = total_questions, total_score=total_score, total=100)  # Show out of 100
 
 if __name__ == '__main__':
