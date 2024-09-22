@@ -8,8 +8,8 @@ app.secret_key = 'your_secret_key'
 def import_question():
     folder = "../CA_Acupuncture_Exam/講義/"
     # file = "Q&A-1 中醫基礎 p01"
-    # file = "Q&A-6 針灸 IIa p01"
-    file = "Q&A-9 方劑 p01"
+    file = "Q&A-6 針灸 IIa p01"
+    # file = "Q&A-9 方劑 p01"
     ###
     foler_file_name = folder + file + ".txt"
     with open(foler_file_name, "r", encoding='utf-8') as f: 
@@ -62,18 +62,18 @@ def import_question():
 
 questions = import_question()
 
-questions = [
-    {
-        'question': '在陽性物質的基礎上所產生陰證 , 應屬於何種病證?',
-        'options': ['氣虛', '血瘀'],
-        'answer': '氣虛'
-    },
-    {
-        'question': '依據五行理論的特性 , 五臟中何者屬於陽?',
-        'options': ['肺, 腎','肝, 心'],
-        'answer': '肝, 心'
-    }
-]
+# questions = [
+#     {
+#         'question': '在陽性物質的基礎上所產生陰證 , 應屬於何種病證?',
+#         'options': ['氣虛', '血瘀'],
+#         'answer': '氣虛'
+#     },
+#     {
+#         'question': '依據五行理論的特性 , 五臟中何者屬於陽?',
+#         'options': ['肺, 腎','肝, 心'],
+#         'answer': '肝, 心'
+#     }
+# ]
 
 @app.route('/')
 def index():
@@ -97,11 +97,15 @@ def question():
                             session['score'] += 1
                     except:
                         session['score'] += 1
-                    session['answered_questions'].append(current_question)  # Mark question as answered correctly
+                    # session['answered_questions'].append(current_question)  # Mark question as answered correctly
                 session['correct_answer'] = True
             else:
+                session['incorrect_questions'].append({
+                        'question': questions[current_question]['question'],
+                        'correct_answer': questions[current_question]['answer']
+                    })
                 session['correct_answer'] = False
-
+            session['answered_questions'].append(current_question)
             session['is_answered'] = True
             return redirect(url_for('question'))
 
@@ -139,7 +143,8 @@ def result():
     score = session.get('score', 0)
     total_questions = len(questions)
     total_score = round((score / total_questions) * 100, 2) if total_questions > 0 else 0
-    return render_template('result.html', score= score, total_questions = total_questions, total_score=total_score, total=100)  # Show out of 100
+    incorrect_questions = session.get('incorrect_questions', [])
+    return render_template('result.html', score= score, total_questions = total_questions, total_score=total_score, total=100, incorrect_questions=incorrect_questions)  # Show out of 100
 
 if __name__ == '__main__':
     app.run(debug=True)

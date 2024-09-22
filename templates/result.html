@@ -1,12 +1,31 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="zh">
 <head>
-    <meta charset="utf-8">
-    <title>Result</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>測驗結果</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-	<h1>Your Score: {{ score }} out of {{ total_questions }}</h1>
-    <h1>Your Score: {{ total_score }}</h1>
-    <a href="{{ url_for('index') }}">Restart</a>
+    <div class="container mt-5">
+        <h1>測驗結果</h1>
+        <h2>你的分數: {{ score }} / {{ total_questions }} ({{ total_score }}%)</h2>
+
+        <h3>錯誤題目</h3>
+        {% if incorrect_questions %}
+            <ul class="list-group">
+                {% for question in incorrect_questions %}
+                    <li class="list-group-item">
+                        <strong>問題:</strong> {{ question.question }}<br>
+                        <strong>正確答案:</strong> {{ question.correct_answer }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>你沒有做錯題目！</p>
+        {% endif %}
+
+        <a href="{{ url_for('index') }}" class="btn btn-primary mt-4">重新開始測驗</a>
+    </div>
 </body>
 </html>
